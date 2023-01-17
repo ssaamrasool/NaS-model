@@ -14708,7 +14708,7 @@ $$<ul>
 $$
 P_0=c_aA + (c_{add}+c_{bop})\frac{E_d}{t_d} + \sum_{i} c_{m,i}m_i \tag{6}
 $$<ul>
-<li>$c_a$: electrode/reactor cost per unit area</li>
+<li>$c_a$: electrode/reactor cost per units of electrode area</li>
 <li>A: electrode area</li>
 <li>$c_{add}$: additional costs, units in cost per power</li>
 <li>$c_{bop}$: balance-of-plant costs, units in cost per power</li>
@@ -14717,6 +14717,7 @@ $$<ul>
 <li>$m_i$: mass of material i in the electrolyte</li>
 </ul>
 <p>Costs related to the operation of the plant including power management, electrolyte pumps, and heating/cooling are inlcuded in $c_{bop}$, while other costs such as labor and overhead costs are included in $c_{add}$. Some costs that are not included in the calculation are the construction of the plant itself since that may vary greatly depending on a wide range of external factors. If desired, those costs can still be added to the capital cost.</p>
+<p><br /><br /><br /><br /></p>
 <p>Based on the current density, discharged energy, and energy efficiency of the electrode, the area of the electrode can be expressed as the discharged energy divided by the adjusted power density.</p>
 $$
 A=\frac{E_d}{\varepsilon_{sys,d}V_di_dt_d} \tag{7}
@@ -14728,9 +14729,41 @@ $$<ul>
 <p>The parameters that define the required electrode area are those related to the discharge of the battery since the faster discharge time (as opposed to charge time) makes it the limiting case. Bringing together equations 3, 6, 5, and 7 yields:</p>
 $$
 c_a\frac{E_d}{\varepsilon_{sys,d}V_di_dt_d} + (c_{add}+c_{bop})\frac{E_d}{t_d} + \sum_{i} c_{m,i}m_i=(\omega p_dE_d)(1-\frac{p_c}{\varepsilon_{e,rt}p_d})\frac{1-e^{-rt_L}}{r} \tag{8}
-$$<p>which is of the same exponential form as equation 3 with respect to time. This behavior will change given materials cost time dependence, time dependence of discharged energy, and the many efficiencies. In this form we can solve for the required battery metrics over time. We may also choose to not substitute for $P_0$ yielding an expression for limiting capital costs by expanding equation 6. This is also done in Darling's analysis.</p>
+$$<p>which is of the same exponential form as equation 3 with respect to time. This behavior will change given materials cost time dependence, time dependence of discharged energy, and the many efficiencies. In this form we can solve for the required battery metrics over time. We may also choose to not substitute for $P_0$ yielding an expression for limiting capital costs by expanding equation 6. This is also done in Darling's analysis and will be considered.</p>
+<p><br /><br /><br /><br /></p>
+<p>$\sum_{i} c_{m,i}m_i$ can be expanded if we consider Faraday's law for each of the electrochemically active materials, and consider that the quantity of electrolyte needed depends on the solubility of each of the active materials in the electrolyte. In our case, we use a solid electrolyte and liquid electrodes, so this consideration must be slightly adjusted. Regardless, the mass of positive active material is given by:</p>
+$$
+m_+=\frac{M_+s_+E_d}{\varepsilon_{sys,d}\varepsilon_{q,rt}V_dn_eF\chi} \tag{9}
+$$<ul>
+<li>$\varepsilon_{q,rt}$: round trip coulombic efficiency</li>
+<li>M_+: molar mass of species $m_+$</li>
+<li>s_+: stoichiometry of $m_+$ in the energy storage reaction</li>
+<li>$\chi$: state of charge</li>
+<li>$n_e$: number of electrons</li>
+<li>F: Faraday's constant</li>
+</ul>
+<p>Assuming a linear polarization response, the following equation relates the discharge voltage and current density:</p>
+$$
+V_d=V_{OC}-i_dR \tag{10}
+$$<ul>
+<li>R: area specific resistance (ASR). Ohmic losses and mass transport losses in both the electrodes and membrane contribute to the ASR</li>
+<li>$V_{OC}$: open circuit voltage</li>
+</ul>
+<p>And we define the discharge voltage efficiency $\varepsilon_{v,d}$ as</p>
+$$
+\varepsilon_{v,d}=\frac{V_d}{V_{OC}} \tag{11}
+$$<p>We need to account for the cost of the negative and positive electrolyte too. Darling combines the cost of all negative and positive electrolyte materials and expresses the total cost as a function of the solubility of the positive and negative materials in these electrolytes.</p>
+<p>Thus, the active material and electrolyte cost in the expression $\sum_{i} c_{m,i}m_i$ can be used to expand it:</p>
+$$
+\sum_{i} c_{m,i}m_i = \frac{E_d}{\varepsilon_{sys,d}\varepsilon_{q,rt}V_dn_eF}\biggl[\frac{M_+s_+}{\chi_+}(c_{m_+}+\frac{c_{m,e_+}}{S_+})+\frac{M_-s_-}{\chi_-}(c_{m_+}+\frac{c_{m,e_-}}{S_-})\biggr] \tag{12}
+$$<p><br /><br /><br /><br /></p>
+<p>Substituting using equations 12, 11, 10, and 7 into 6 yields our final battery price metric, normalized by units of energy in discharge:</p>
+$$
+\frac{P_0}{E_d}=\frac{c_aR}{\varepsilon_{sys,d}\varepsilon_{v,d}V_{OC}^2(1-\varepsilon_{v,d})t_d}+\frac{1}{\varepsilon_{sys,d}\varepsilon_{q,rt}\varepsilon_{v,d}n_eFV_{OC}}\biggl[\frac{M_+s_+}{\chi_+}(c_{m_+}+\frac{c_{m,e_+}}{S_+})+\frac{M_-s_-}{\chi_-}(c_{m_+}+\frac{c_{m,e_-}}{S_-})\biggr]+\frac{(c_{add}+c_{bop})}{t_d}   \tag{13}
+$$<p>Now, we will examine the economics of our system.</p>
 <hr />
-<h3 id="Economics-of-the-Li-S,-Na-S-flow-cell">Economics of the Li-S, Na-S flow cell<a class="anchor-link" href="#Economics-of-the-Li-S,-Na-S-flow-cell">&#182;</a></h3>
+<h3 id="Economics-of-the-Na-S-flow-cell">Economics of the Na-S flow cell<a class="anchor-link" href="#Economics-of-the-Na-S-flow-cell">&#182;</a></h3><p>The following charge discharge curve of the Na-S flow cell was provided to me by Zhenghao Yang.</p>
+
 </div>
 </div>
 </div>
